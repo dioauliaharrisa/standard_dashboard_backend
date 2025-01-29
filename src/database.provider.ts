@@ -41,11 +41,10 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     CREATE TABLE IF NOT EXISTS "reports" (
       id SERIAL PRIMARY KEY,
       date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-      section TEXT NOT NULL,                   
-      report_type TEXT NOT NULL,              
-      personnels TEXT[],                     
-      report_output TEXT,                 
-      documentation TEXT                      
+      section TEXT NOT NULL,                               
+      personnels TEXT NOT NULL,                     
+      report JSONB,          
+      documentation BYTEA                      
     );
   `;
 

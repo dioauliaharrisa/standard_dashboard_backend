@@ -97,3 +97,116 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+```
+standard_dashboard_backend
+├─ .git
+│  ├─ COMMIT_EDITMSG
+│  ├─ config
+│  ├─ description
+│  ├─ HEAD
+│  ├─ hooks
+│  │  ├─ applypatch-msg.sample
+│  │  ├─ commit-msg.sample
+│  │  ├─ fsmonitor-watchman.sample
+│  │  ├─ post-update.sample
+│  │  ├─ pre-applypatch.sample
+│  │  ├─ pre-commit.sample
+│  │  ├─ pre-merge-commit.sample
+│  │  ├─ pre-push.sample
+│  │  ├─ pre-rebase.sample
+│  │  ├─ pre-receive.sample
+│  │  ├─ prepare-commit-msg.sample
+│  │  ├─ push-to-checkout.sample
+│  │  └─ update.sample
+│  ├─ index
+│  ├─ info
+│  │  └─ exclude
+│  ├─ objects
+│  │  ├─ 12
+│  │  │  ├─ 7821066b6e56e05ed61028192da68b56ac3b51
+│  │  │  └─ a3ae8cd7205df79d92bb83b92756f30a2d9231
+│  │  ├─ 21
+│  │  │  └─ 69963924e1fa1f0550d3764baef28f045b85b8
+│  │  ├─ 2c
+│  │  │  └─ 18b61b904459a229923a990857dbbfdfbb7a8b
+│  │  ├─ 38
+│  │  │  └─ a33532dff01df4b5218a993ad201399198ea81
+│  │  ├─ 3f
+│  │  │  └─ 16497ff62f2259280fc328dca861e858ec2ba8
+│  │  ├─ 41
+│  │  │  └─ 38377058a5e2cba8deb90d5e1b902d8d77cc86
+│  │  ├─ 42
+│  │  │  └─ 735270d2011ccdcc0f502d29dd5eddfc675876
+│  │  ├─ 45
+│  │  │  └─ 10dc5c8082d8c57e1b6dc3c9330dfed7607c4b
+│  │  ├─ 49
+│  │  │  └─ 1d46f3c9b80d8d8713f85e419044b781a12933
+│  │  ├─ 4b
+│  │  │  └─ 56acfbebf41e17d1ff0dd945bb4c545eae1db1
+│  │  ├─ 4d
+│  │  │  ├─ 34b3bfb6a512cf6ea0fb65dc508f156dca0517
+│  │  │  └─ f6580c782cc8cbb5c750e68f21de84c2e057be
+│  │  ├─ 64
+│  │  │  └─ f86c6bd2bb30e3d22e752295eb7c7923fc191e
+│  │  ├─ 66
+│  │  │  └─ 133c169cd789dc9c4cd4c87df0ce69394a7356
+│  │  ├─ 6b
+│  │  │  └─ 202142447956ea5d2d15715010ebd5f15701ef
+│  │  ├─ 6d
+│  │  │  └─ a6396251645b4a7a998eb4bc40bca4e1a84f9f
+│  │  ├─ 70
+│  │  │  └─ e80eb52a63cde24468204b2f1534a469d8308a
+│  │  ├─ 7b
+│  │  │  └─ c31e19e1770d61dc54cf4dba96beccea1c92a0
+│  │  ├─ 92
+│  │  │  └─ 7d7cca0badb13577152bf8753ce3552358f53b
+│  │  ├─ b9
+│  │  │  └─ 9a4fd52b81549ce7a238833a1d55b3661cdeb5
+│  │  ├─ bd
+│  │  │  └─ b677b2401f6c807513a96755482baaa0d24fb4
+│  │  ├─ c1
+│  │  │  └─ 7103c312893b8adf93855534dccb81c042bf42
+│  │  ├─ cc
+│  │  │  └─ e879ee622146012901c9adb47ef40c0fd3a555
+│  │  ├─ d2
+│  │  │  └─ 2f3890a380cea30641cfecc329b5c794ef5fb2
+│  │  ├─ e9
+│  │  │  └─ d912f3e3cefc18505d3cd19b3a5a9f567f5de0
+│  │  ├─ f9
+│  │  │  └─ aa683b1ad5cffc76da9ad4b77c562ac4c2b399
+│  │  ├─ info
+│  │  └─ pack
+│  └─ refs
+│     ├─ heads
+│     │  └─ master
+│     └─ tags
+├─ .gitignore
+├─ .prettierrc
+├─ eslint.config.mjs
+├─ folder-structure.txt
+├─ nest-cli.json
+├─ package-lock.json
+├─ package.json
+├─ README.md
+├─ src
+│  ├─ app.module.ts
+│  ├─ app.service.ts
+│  ├─ common
+│  │  ├─ controllers
+│  │  │  ├─ reports.controller.ts
+│  │  │  └─ user.controller.ts
+│  │  └─ dto
+│  ├─ database.provider.ts
+│  ├─ main.ts
+│  ├─ reports.module.ts
+│  ├─ reports.service.ts
+│  ├─ users.entity.ts
+│  └─ users.service.ts
+├─ test
+│  ├─ app.e2e-spec.ts
+│  └─ jest-e2e.json
+├─ tsconfig.build.json
+└─ tsconfig.json
+
+```
