@@ -7,16 +7,17 @@ export class UsersService {
 
   async login(email: string, password: string) {
     try {
-      const result = await this.databaseService.query(
-        `SELECT * FROM users WHERE email = $1 LIMIT 1`,
-        [email],
-      );
+      const result: { rows: { password: string }[] } =
+        await this.databaseService.query(
+          `SELECT * FROM users WHERE email = $1 LIMIT 1`,
+          [email],
+        );
 
       if (result.rows.length === 0) {
         throw new UnauthorizedException('Invalid email or password');
       }
 
-      const user = result.rows[0];
+      const user: { password: string } = result.rows[0];
 
       if (user.password !== password) {
         throw new UnauthorizedException('Invalid username or password');
