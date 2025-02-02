@@ -31,6 +31,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       CREATE TABLE IF NOT EXISTS "users" (
         id SERIAL PRIMARY KEY,
         username TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
         name TEXT NOT NULL,
         password TEXT NOT NULL,
         role TEXT NOT NULL
