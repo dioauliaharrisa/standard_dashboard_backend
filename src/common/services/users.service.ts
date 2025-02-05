@@ -22,6 +22,7 @@ export class UsersService {
         throw new UnauthorizedException('Invalid email or password');
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const user: User = result.rows[0];
 
       if (user.password !== password) {

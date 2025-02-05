@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../database.provider';
 import { File } from 'multer';
+import { Readable } from 'stream';
 
 // DTO for input validation
 export interface CreateReportDto {
@@ -9,7 +10,7 @@ export interface CreateReportDto {
   report: { type: string };
   personnels: string;
   reportDetails;
-  outputReports;
+  outputReport: string;
   // documentation: File;
 }
 
@@ -50,13 +51,13 @@ export class ReportsService {
       const result: QueryResult = await this.databaseService.query(
         `
           INSERT INTO reports
-            (date, section, personnels, report, documentation) 
+            (date, section, report, personnels, documentation) 
           VALUES
             ($1, $2, $3, $4, $5) 
           RETURNING 
             id
         `,
-        [date, section, personnels, JSON.parse(reportDetails), buffer],
+        [date, section, JSON.parse(reportDetails), personnels, buffer],
       );
 
       if (!result.rows.length) {
@@ -77,7 +78,6 @@ export class ReportsService {
       const result: QueryResult = await this.databaseService.query(
         'SELECT * FROM reports',
       );
-      console.log('🦆 ~ ReportsService ~ getAllReports ~ result:', result);
 
       return result.rows.map((row) => {
         return {

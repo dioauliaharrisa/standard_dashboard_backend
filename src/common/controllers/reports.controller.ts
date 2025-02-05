@@ -26,7 +26,6 @@ export class ReportsController {
     @Body() body: CreateReportDto,
     @UploadedFile() file: File,
   ) {
-    console.log('🦆 ~ ReportsController ~ createReport ~ body:', body);
     return await this.reportsService.createReport(body, file);
   }
 }
