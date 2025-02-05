@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../database.provider';
 import { File } from 'multer';
-import { Readable } from 'stream';
 
 // DTO for input validation
 export interface CreateReportDto {
@@ -11,7 +10,6 @@ export interface CreateReportDto {
   personnels: string;
   reportDetails;
   outputReport: string;
-  // documentation: File;
 }
 
 // DTO for response format
@@ -73,7 +71,7 @@ export class ReportsService {
     }
   }
 
-  async getAllReports(page: number): Promise<DTOResponseGetAllReports[]> {
+  async getAllReports(): Promise<DTOResponseGetAllReports[]> {
     try {
       const result: QueryResult = await this.databaseService.query(
         'SELECT * FROM reports',

@@ -27,7 +27,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   private async createUsersTable() {
-    const qCreateUsers = `
+    const qCreateTableUsers = `
       CREATE TABLE IF NOT EXISTS "users" (
         id SERIAL PRIMARY KEY,
         username TEXT NOT NULL UNIQUE,
@@ -38,20 +38,29 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       );
     `;
 
-    const qCreateReports = `
-    CREATE TABLE IF NOT EXISTS "reports" (
+    const qCreateTableReports = `
+      CREATE TABLE IF NOT EXISTS "reports" (
+        id SERIAL PRIMARY KEY,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+        section TEXT NOT NULL,                               
+        personnels TEXT NOT NULL,                     
+        report JSONB,          
+        documentation BYTEA                      
+      );
+    `;
+
+    const qCreateTableSchedules = `
+    CREATE TABLE IF NOT EXISTS "schedules" (
       id SERIAL PRIMARY KEY,
       date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-      section TEXT NOT NULL,                               
-      personnels TEXT NOT NULL,                     
-      report JSONB,          
-      documentation BYTEA                      
+      details TEXT NOT NULL                      
     );
   `;
 
     try {
-      await this.pool.query(qCreateUsers);
-      await this.pool.query(qCreateReports);
+      await this.pool.query(qCreateTableUsers);
+      await this.pool.query(qCreateTableReports);
+      await this.pool.query(qCreateTableSchedules);
       console.log('Users table ensured');
     } catch (error) {
       console.error('Error creating Users table:', error);
