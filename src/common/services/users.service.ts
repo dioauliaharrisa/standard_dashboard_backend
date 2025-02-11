@@ -5,6 +5,7 @@ interface User {
   id: number;
   email: string;
   password: string;
+  name: string;
 }
 
 @Injectable()
@@ -31,7 +32,7 @@ export class UsersService {
 
       return {
         message: 'Login successful',
-        userId: user.id,
+        name: user.name,
         // username: user.username,
       };
     } catch (error) {
