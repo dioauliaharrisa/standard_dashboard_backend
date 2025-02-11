@@ -45,7 +45,8 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
         section TEXT NOT NULL,                               
         personnels TEXT NOT NULL,                     
         report JSONB,          
-        documentation BYTEA                      
+        documentation BYTEA, 
+        documentation_details JSONB                      
       );
     `;
 

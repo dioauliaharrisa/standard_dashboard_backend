@@ -31,6 +31,7 @@ export interface DTOResponseGetAllReports {
   personnels: string;
   report: object;
   documentation: File;
+  documentation_details: { name: string; mimetype: string };
 }
 
 @Injectable()
@@ -43,19 +44,28 @@ export class ReportsService {
   ): Promise<ReportResponseDto> {
     try {
       const { date, section, reportDetails, personnels } = body;
+      console.log('🦆 ~ ReportsService ~ file:', file);
 
       const buffer = file.buffer;
+      // const base64Data = buffer.toString('base64');
 
       const result: QueryResult = await this.databaseService.query(
         `
           INSERT INTO reports
-            (date, section, report, personnels, documentation) 
+            (date, section, report, personnels, documentation, documentation_details) 
           VALUES
-            ($1, $2, $3, $4, $5) 
+            ($1, $2, $3, $4, $5, $6) 
           RETURNING 
             id
         `,
-        [date, section, JSON.parse(reportDetails), personnels, buffer],
+        [
+          date,
+          section,
+          JSON.parse(reportDetails),
+          personnels,
+          buffer,
+          { name: file.originalname, mimetype: file.mimetype },
+        ],
       );
 
       if (!result.rows.length) {
@@ -85,6 +95,7 @@ export class ReportsService {
           report: row.report,
           personnels: row.personnels,
           documentation: row.documentation,
+          documentation_details: row.documentation_details,
         };
       });
     } catch (error) {
