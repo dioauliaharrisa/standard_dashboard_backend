@@ -35,6 +35,7 @@ export class UsersService {
         message: 'Login successful',
         name: user.name,
         id: user.id,
+        role: user.role,
       };
     } catch (error) {
       console.log(error);

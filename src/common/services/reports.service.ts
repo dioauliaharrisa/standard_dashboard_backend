@@ -14,6 +14,7 @@ export interface CreateReportDto {
 
 export type DTOGetAllReports = {
   id: string;
+  role: string;
 };
 // DTO for response format
 export interface ReportResponseDto {
@@ -105,23 +106,42 @@ export class ReportsService {
     body: DTOGetAllReports,
   ): Promise<DTOResponseGetAllReports[]> {
     try {
-      const { id } = body;
-      console.log('🦆 ~ ReportsService ~ id:', id);
+      const { id, role } = body;
+      console.log('🦆 ~ ReportsService ~ id:', id, role);
+
+      const whereIsRolePimpinan =
+        role === 'PEGAWAI'
+          ? `
+              WHERE EXISTS (
+                SELECT 1 FROM reports_users ru 
+                WHERE ru.report_id = r.id 
+                AND ru.user_id = $1
+              )
+            `
+          : '';
+
+      const queryGetAllReports = `
+        WITH personnel_data AS (
+          SELECT 
+            ur.report_id, 
+            STRING_AGG(u.name, ', ') AS personnels
+          FROM reports_users ur
+          JOIN Users u ON ur.user_id = u.id
+          GROUP BY ur.report_id
+        )
+        SELECT r.*, COALESCE(pd.personnels, '') AS personnels
+        FROM reports r
+        LEFT JOIN personnel_data pd ON r.id = pd.report_id
+        ${whereIsRolePimpinan}
+      `;
+      console.log(
+        '🦆 ~ ReportsService ~ queryGetAllReports:',
+        queryGetAllReports,
+      );
 
       const result: QueryResult = await this.databaseService.query(
-        `
-          WITH personnel_data AS (
-            SELECT 
-              ur.report_id, 
-              STRING_AGG(u.name, ', ') AS personnels
-            FROM reports_users ur
-            JOIN Users u ON ur.user_id = u.id
-            GROUP BY ur.report_id
-          )
-          SELECT r.*, COALESCE(pd.personnels, '') AS personnels
-          FROM reports r
-          LEFT JOIN personnel_data pd ON r.id = pd.report_id
-        `,
+        queryGetAllReports,
+        [id],
       );
 
       return result.rows.map((row) => {
