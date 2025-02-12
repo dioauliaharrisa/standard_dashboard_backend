@@ -4,19 +4,27 @@ import {
   Body,
   UseInterceptors,
   UploadedFile,
-  Get,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateReportDto, ReportsService } from '../services/reports.service';
+import {
+  CreateReportDto,
+  DTOGetAllReports,
+  ReportsService,
+} from '../services/reports.service';
 import { File } from 'multer';
 
 @Controller('report')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-  @Get('get-all')
-  async getAllReports() {
-    return await this.reportsService.getAllReports();
+  @Post('get-all')
+  async getAllReports(@Body() body: DTOGetAllReports) {
+    return await this.reportsService.getAllReports(body);
+  }
+
+  @Post('get-personnels')
+  async getPersonnels() {
+    return await this.reportsService.getPersonnels();
   }
 
   @Post('create')

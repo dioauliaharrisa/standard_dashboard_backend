@@ -51,17 +51,27 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     `;
 
     const qCreateTableSchedules = `
-    CREATE TABLE IF NOT EXISTS "schedules" (
-      id SERIAL PRIMARY KEY,
-      date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-      details TEXT NOT NULL                      
-    );
-  `;
+      CREATE TABLE IF NOT EXISTS "schedules" (
+        id SERIAL PRIMARY KEY,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+        details TEXT NOT NULL                      
+      );
+    `;
+    const qCreateTableReportsUsers = `
+      CREATE TABLE IF NOT EXISTS "reports_users" (
+        user_id INT NOT NULL,
+        report_id INT NOT NULL,
+        PRIMARY KEY (user_id, report_id),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE
+      );
+    `;
 
     try {
       await this.pool.query(qCreateTableUsers);
       await this.pool.query(qCreateTableReports);
       await this.pool.query(qCreateTableSchedules);
+      await this.pool.query(qCreateTableReportsUsers);
       console.log('Users table ensured');
     } catch (error) {
       console.error('Error creating Users table:', error);

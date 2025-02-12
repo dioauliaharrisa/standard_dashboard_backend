@@ -12,6 +12,9 @@ export interface CreateReportDto {
   outputReport: string;
 }
 
+export type DTOGetAllReports = {
+  id: string;
+};
 // DTO for response format
 export interface ReportResponseDto {
   id: number;
@@ -22,6 +25,10 @@ export interface ReportResponseDto {
 }
 interface QueryResult {
   rows: DTOResponseGetAllReports[];
+}
+
+interface QueryResultGetPersonnels {
+  rows: { id: number; name: string }[];
 }
 
 export interface DTOResponseGetAllReports {
@@ -44,13 +51,12 @@ export class ReportsService {
   ): Promise<ReportResponseDto> {
     try {
       const { date, section, reportDetails, personnels } = body;
-      console.log('🦆 ~ ReportsService ~ file:', file);
 
       const buffer = file.buffer;
-      // const base64Data = buffer.toString('base64');
 
-      const result: QueryResult = await this.databaseService.query(
-        `
+      const responseCreateReport: QueryResult =
+        await this.databaseService.query(
+          `
           INSERT INTO reports
             (date, section, report, personnels, documentation, documentation_details) 
           VALUES
@@ -58,22 +64,36 @@ export class ReportsService {
           RETURNING 
             id
         `,
-        [
-          date,
-          section,
-          JSON.parse(reportDetails),
-          personnels,
-          buffer,
-          { name: file.originalname, mimetype: file.mimetype },
-        ],
-      );
+          [
+            date,
+            section,
+            JSON.parse(reportDetails),
+            personnels,
+            buffer,
+            { name: file.originalname, mimetype: file.mimetype },
+          ],
+        );
 
-      if (!result.rows.length) {
+      if (!responseCreateReport.rows.length) {
         throw new Error('Failed to retrieve inserted report ID');
       }
 
+      const reportId = responseCreateReport.rows[0].id;
+
+      for (const personnel of personnels) {
+        await this.databaseService.query(
+          `
+           INSERT INTO reports_users
+              (user_id, report_id) 
+            VALUES
+              ($1, $2) 
+          `,
+          [personnel, reportId],
+        );
+      }
+
       return {
-        id: result.rows[0].id,
+        id: +reportId,
       };
     } catch (error) {
       console.error('Error inserting report:', error);
@@ -81,10 +101,27 @@ export class ReportsService {
     }
   }
 
-  async getAllReports(): Promise<DTOResponseGetAllReports[]> {
+  async getAllReports(
+    body: DTOGetAllReports,
+  ): Promise<DTOResponseGetAllReports[]> {
     try {
+      const { id } = body;
+      console.log('🦆 ~ ReportsService ~ id:', id);
+
       const result: QueryResult = await this.databaseService.query(
-        'SELECT * FROM reports',
+        `
+          WITH personnel_data AS (
+            SELECT 
+              ur.report_id, 
+              STRING_AGG(u.name, ', ') AS personnels
+            FROM reports_users ur
+            JOIN Users u ON ur.user_id = u.id
+            GROUP BY ur.report_id
+          )
+          SELECT r.*, COALESCE(pd.personnels, '') AS personnels
+          FROM reports r
+          LEFT JOIN personnel_data pd ON r.id = pd.report_id
+        `,
       );
 
       return result.rows.map((row) => {
@@ -101,6 +138,23 @@ export class ReportsService {
     } catch (error) {
       console.error('Error fetching reports:', error);
       throw new Error('Failed to fetch reports');
+    }
+  }
+
+  async getPersonnels() {
+    try {
+      const result: QueryResultGetPersonnels = await this.databaseService.query(
+        'SELECT * FROM users',
+      );
+      return result.rows.map((row) => {
+        return {
+          value: row.id.toString(),
+          label: row.name,
+        };
+      });
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      throw new Error('Failed to get personnels');
     }
   }
 }
