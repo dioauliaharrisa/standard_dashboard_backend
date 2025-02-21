@@ -107,7 +107,9 @@ export class ReportsService {
   ): Promise<DTOResponseGetAllReports[]> {
     try {
       const { id, role } = body;
-      console.log('🦆 ~ ReportsService ~ id:', id, role);
+      // console.log('🦆 ~ ReportsService ~ id:', id, role);
+
+      const params = role === 'PEGAWAI' ? [id] : [];
 
       const whereIsRolePimpinan =
         role === 'PEGAWAI'
@@ -134,14 +136,10 @@ export class ReportsService {
         LEFT JOIN personnel_data pd ON r.id = pd.report_id
         ${whereIsRolePimpinan}
       `;
-      console.log(
-        '🦆 ~ ReportsService ~ queryGetAllReports:',
-        queryGetAllReports,
-      );
 
       const result: QueryResult = await this.databaseService.query(
         queryGetAllReports,
-        [id],
+        params,
       );
 
       return result.rows.map((row) => {
